@@ -24,10 +24,6 @@ public class UserController {
 	public String login () {
 		return "login";
 	}
-	@GetMapping("/super")
-	public String superUser () {
-		return "super";
-	}
 	@GetMapping("/user")
 	public String user () {
 		return "user";

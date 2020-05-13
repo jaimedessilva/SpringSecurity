@@ -44,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//The pages not require Login
         http.authorizeRequests().antMatchers("/","/home","/login").permitAll();
         //The Pages Require Login
-        http.authorizeRequests().antMatchers("/admin/**").hasAnyRole("ADMIN")
-                                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+        http.authorizeRequests().antMatchers("/admin","/user").hasAnyRole("ADMIN")
+                                .antMatchers("/user").hasAnyRole("USER","ADMIN")
                                 .anyRequest().authenticated();
         //Config Form Login
         http.authorizeRequests().and().formLogin()

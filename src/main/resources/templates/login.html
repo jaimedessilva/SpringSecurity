@@ -12,6 +12,35 @@ body{
 	background: white;
 	background: url([[@{/images/internet.jpg}]])
 	no-repeat center center fixed;
+	margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #000000;
+  opacity : 0.8;
+  z-index: 9;
+  transition: 0.5s;
+  
+}
+
+.topnav a {
+  float: left;
+  color: #818181;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #0d98ba;
+  color: white;
 }
 .login-form {
 	width: 340px;
@@ -44,8 +73,13 @@ body{
 </head>
 
 <body >
-<h2><a th:href="@{/home}">* Home Page da Empresa</a></h2>
-<h2><a th:href="@{/home}">* Sobre</a></h2>
+<div class="topnav">
+  <a th:href="@{/home}" class="active" >Home</a>
+  <a th:href="@{/admin}">Admin</a>
+  <a th:href="@{/user}">Usuario</a>
+  <a th:href="@{/home}">Sobre</a>
+</div>
+
 <div class="login-form">	
     <form th:action="@{/login}" method="post">
 		<h4 class="text-center">Login Spring-Security</h4>
@@ -80,6 +114,7 @@ body{
     
 	</div>                                       
 <!-- <div th:replace="fragments/footer :: footer"/> -->
+<h3 class="text-center">Developed By <b>SS</b> Jaime</h3>
 
 </body>
 </html>
