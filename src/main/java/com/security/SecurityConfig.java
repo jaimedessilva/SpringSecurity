@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 	        return new BCryptPasswordEncoder();
 	    }
-	//Usuarios
+	//Autention in Memory
 	@Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -38,23 +39,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 *   roles admin acess /admin/**
 		 *   roles user acess /user/***
 		 */
-		http
-        .csrf().disable()
-        .authorizeRequests()
-        .antMatchers("/","/home","/login").permitAll()
-        .antMatchers("/admin/**").hasAnyRole("ADMIN")
-        .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
-        .anyRequest().authenticated()
-        .and()
-        .formLogin()
+		http.csrf().disable();
+		
+		//The pages not require Login
+        http.authorizeRequests().antMatchers("/","/home","/login").permitAll();
+        //The Pages Require Login
+        http.authorizeRequests().antMatchers("/admin/**").hasAnyRole("ADMIN")
+                                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                                .anyRequest().authenticated();
+        //Config Form Login
+        http.authorizeRequests().and().formLogin()
         .loginPage("/login") //Formulario de Login Personalizado
         .loginProcessingUrl("/login")
         .defaultSuccessUrl("/user",true)
+        .failureUrl("/login?error=true")
+        .usernameParameter("username")
+        .passwordParameter("password")
+        //Config Logout Page
         .and()
         .logout()
         .logoutUrl("/logout")
         .deleteCookies("JSESSIONID");
 		 
 	}
-
+	/*Permit static images and css*/
+	@Override
+	public void configure(WebSecurity web) throws Exception{
+		web.ignoring().antMatchers("/static/**", "/images/**");
+	}
 }
